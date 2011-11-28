@@ -1,1 +1,6 @@
+require 'active_support/inflector'
 require 'jung/campaign.rb'
+require 'jung/email_campaign.rb'
+require 'jung/sms_campaign.rb'
+require 'jung/config.rb'
+require 'jung/recipient.rb'
