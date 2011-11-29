@@ -1,6 +1,7 @@
 module Jung
   class Campaign
-    attr_reader :recipients
+    # attr_accessor
+    attr_reader :id, :recipients, :config, :name
     attr_writer :recipients
 
     def initialize(options)
@@ -10,11 +11,13 @@ module Jung
     end
 
     def self.build(type, options)
-      driver = options[:config].get_driver_for type
-      class_name = driver.to_s.capitalize + type.to_s.capitalize + 'Driver';
-      require 'jung/drivers/' + class_name.underscore + '.rb'
-      eval 'Campaign.send :include, ' + class_name
-      eval type.to_s.capitalize + 'Campaign.new options'
+      constant = Jung.const_get type.to_s.capitalize + 'Campaign'
+      constant.new options
     end
+
+    def create_recipient(attributes)
+      self.recipients << Jung::Recipient.new(attributes)
+    end
+
   end
 end
