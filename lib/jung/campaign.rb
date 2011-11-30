@@ -1,23 +1,21 @@
 module Jung
-  class Campaign
+  class Campaign < Jung::List
     # attr_accessor
-    attr_reader :id, :recipients, :config, :name
-    attr_writer :recipients
-
+    attr_reader :id, :name, :sender
+    
     def initialize(options)
+      super options
+
       @name = options[:name]
-      @config = options[:config]
-      @recipients = []
+      @subject = options[:subject]
+      @sender = options[:sender]
+
+      self.load_driver
     end
 
-    def self.build(type, options)
-      constant = Jung.const_get type.to_s.capitalize + 'Campaign'
-      constant.new options
-    end
-
-    def create_recipient(attributes)
-      self.recipients << Jung::Recipient.new(attributes)
-    end
+    def load_driver
+      self.extend config.driver_const
+    end    
 
   end
 end

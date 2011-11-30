@@ -1,15 +1,16 @@
 module Jung
   class Config
 
-    attr_reader :options
+    attr_reader :driver, :options
 
     def initialize(options)
-      @options = options
-      require 'jung/drivers/email/' + options[:drivers][:email].to_s.underscore + '.rb'
+      @driver = options[:driver]
+      @options = options[:options]
+      require 'jung/drivers/' + options[:driver].to_s.underscore + '.rb'
     end
 
-    def email_driver
-      Jung::Drivers::Email.const_get self.options[:drivers][:email].to_s.camelize
+    def driver_const
+      Jung::Drivers.const_get self.driver.to_s.camelize
     end
 
   end
