@@ -89,9 +89,7 @@ module Jung::Drivers::Mailchimp
     
     def save
       self.sync_merge_vars
-      
       self.sync_members
-
     end
 
     protected
@@ -119,9 +117,9 @@ module Jung::Drivers::Mailchimp
       end
 
       # Now update/add the members
-      # self.recipients.each do |recipient| 
-      #   api.list_subscribe
-      # end
+      self.recipients.each do |recipient| 
+        api.list_subscribe
+      end
     end
   end
 
