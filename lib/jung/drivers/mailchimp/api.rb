@@ -97,7 +97,21 @@ class Jung::Drivers::Mailchimp::Api
   end
 
   def campaign_update campaign
+    campaign.pry
+  end
 
+  def campaign id
+    campaigns = gb.campaigns({ :filters => { :campaign_id => id } })
+    campaigns["data"].first
+  end
+
+  def campaign_content id
+    campaign_content = gb.campaign_content :cid => id
+    campaign_content["html"]
+  end
+
+  def campaign_send_now id
+    gb.campaign_send_now :cid => id
   end
 
 end

@@ -1,9 +1,14 @@
-module module Jung::Drivers::Mailchimp::List
+module Jung::Drivers::Mailchimp::List
 
   def save
-    sync_merge_vars
-    sync_members
-    delete_non_members
+    sync_merge_vars && sync_members && delete_non_members
+  end
+
+  def all
+    list_members
+  end
+
+  def errors
   end
 
   protected

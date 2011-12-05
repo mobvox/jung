@@ -1,8 +1,8 @@
-require 'mailchimp/api.rb'
-require 'mailchimp/list.rb'
-require 'mailchimp/campaign.rb'
-
 module Jung::Drivers::Mailchimp
+
+  require 'jung/drivers/mailchimp/api.rb'
+  require 'jung/drivers/mailchimp/list.rb'
+  require 'jung/drivers/mailchimp/campaign.rb'
 
   attr_reader :gb, :list_id, :api, :id
   attr_writer :gb, :list_id, :api
