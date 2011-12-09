@@ -7,3 +7,4 @@ tmp/
 ._*
 Gemfile.lock
 .AppleDouble
+test/config/*.yml

@@ -6,7 +6,7 @@ source "http://rubygems.org"
 gem "gibbon"
 gem "activesupport"
 gem "i18n"
-gem "gibbon"
+gem "rdoc"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

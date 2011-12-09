@@ -1,8 +1,11 @@
 module Jung::Drivers::Mailchimp::Campaign
 
   def find(id)
-    @id |= id
+    @id = id
     campaign = api.campaign id
+
+    return false if !campaign
+
     campaign_content = api.campaign_content id
     
     @name = campaign["title"]
@@ -12,15 +15,21 @@ module Jung::Drivers::Mailchimp::Campaign
   end
 
   def save
-    # sync_merge_vars
-    # sync_members
-    sync_campaign
-    sync_static_segments
+    if sync_merge_vars &&
+       sync_members &&
+       sync_campaign &&
+       sync_static_segments
+      @id
+    end
   end
 
   def deliver
     save
     # api.campaign_send_now id
+  end
+
+  def delete
+    api.campaign_delete id
   end
 
   protected

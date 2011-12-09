@@ -1,10 +1,11 @@
 class Jung::Drivers::Mailchimp::Api
 
-  attr_reader :gb, :list_id
+  attr_reader :gb, :list_id, :errors
+  attr_writer :errors
 
   def initialize(config)
-    @gb = Gibbon.new config.options[:api_key]
-    @list_id = config.options[:list_id]
+    @gb = Gibbon.new config.options["api_key"]
+    @list_id = config.options["list_id"]
   end
 
   # List Related
@@ -15,16 +16,16 @@ class Jung::Drivers::Mailchimp::Api
 
     @merge_vars ||= list_merge_vars
 
-    return unless @merge_vars.include? tag
+    return true unless !@merge_vars.include? tag
+
+    # Cache is never ugly
+    @merge_vars << tag
 
     gb.list_merge_var_add({
       :id => list_id,
       :tag => tag,
       :name => name
     })
-
-    # Cache is never ugly
-    @merge_vars << tag
   end
 
   def list_merge_vars
@@ -38,13 +39,13 @@ class Jung::Drivers::Mailchimp::Api
       acc
     end
 
-    gb.list_subscribe({
+    add_errors_and_return(gb.list_subscribe({
       :id => list_id,
       :email_address => recipient.address,
       :merge_vars => merge_vars,
       :double_optin => false,
       :update_existing => true
-    })
+    })) { self == 'true' }
   end
 
   def list_unsubscribe(address)
@@ -78,10 +79,10 @@ class Jung::Drivers::Mailchimp::Api
   end
 
   def campaign_create campaign
-    gb.campaign_create({ 
+    add_errors_and_return(gb.campaign_create({ 
       :type => :regular,
       :options => {
-        :list_id => campaign.list_id,
+        :list_id => list_id,
         :title => campaign.name,
         :subject => campaign.subject,
         :from_name => campaign.sender.name,
@@ -93,16 +94,19 @@ class Jung::Drivers::Mailchimp::Api
       :content => {
         :html => ''
       }
-    })
+    })) { gsub(/\"/, '') }
   end
 
   def campaign_update campaign
-    campaign.pry
+    # campaign.pry
   end
 
   def campaign id
-    campaigns = gb.campaigns({ :filters => { :campaign_id => id } })
-    campaigns["data"].first
+    add_errors_and_return(gb.campaigns({
+      :filters => {
+        :campaign_id => id
+      }
+    })) { self["data"].first }
   end
 
   def campaign_content id
@@ -112,6 +116,22 @@ class Jung::Drivers::Mailchimp::Api
 
   def campaign_send_now id
     gb.campaign_send_now :cid => id
+  end
+
+  def campaign_delete id
+    gb.campaign_delete :cid => id
+  end
+
+  private
+
+  def add_errors_and_return(result, &proc)
+    if result["error"]
+      self.errors ||= [] << result["code"].to_s + ' - ' + result["error"]
+      false
+    else
+      result.instance_eval(&proc)
+      # proc ? res.instance_eval(&proc) : result
+    end
   end
 
 end
