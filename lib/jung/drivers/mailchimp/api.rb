@@ -87,7 +87,7 @@ class Jung::Drivers::Mailchimp::Api
   end
 
   def find_or_add_static_segment name
-    find_static_segment(name) || 
+    list_static_segment_find(name) || 
     list_static_segment_add(name)
   end
 
@@ -95,7 +95,7 @@ class Jung::Drivers::Mailchimp::Api
     gb.list_static_segment_add :id => list_id, :name => name
   end
 
-  def find_static_segment name
+  def list_static_segment_find name
     static_segments = list_static_segments
     static_segments[name]
   end
@@ -189,7 +189,6 @@ class Jung::Drivers::Mailchimp::Api
       false
     else
       result.instance_eval(&proc)
-      # proc ? res.instance_eval(&proc) : result
     end
   end
 

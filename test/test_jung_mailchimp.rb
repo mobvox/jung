@@ -46,7 +46,7 @@ class TestJung < Test::Unit::TestCase
     assert campaign.delete
   end
 
-  def test_campaign_deliver
+  def test_campaign_schedule_unschedule_delete
     # First lets define a campaign
     rand = rand(123 * 456)
     campaign = Jung::Campaign.new({

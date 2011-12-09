@@ -29,8 +29,8 @@ module Jung::Drivers::Mailchimp::Campaign
   end
 
   def schedule time
-    save
-    api.campaign_schedule id, time
+    save &&
+    api.campaign_schedule(id, time)
   end
 
   def unschedule
@@ -51,12 +51,7 @@ module Jung::Drivers::Mailchimp::Campaign
   protected
 
   def reset
-    # TODO: Better syntax
     @id = nil
-    @name = nil
-    @sender = nil
-    @subject = nil
-    @template = nil
     true
   end
 
