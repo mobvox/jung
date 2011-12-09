@@ -1,4 +1,7 @@
 require 'active_support/inflector'
+require 'gibbon'
+require 'pry'
+
 require 'jung/sender.rb'
 require 'jung/list.rb'
 require 'jung/campaign.rb'

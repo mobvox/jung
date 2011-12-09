@@ -1,7 +1,8 @@
 module Jung
   class List
-    attr_reader :config, :recipients
-    attr_writer :recipients
+    
+    attr_reader :config
+    attr_accessor :recipients
 
     def initialize(options)
       @config = options[:config]

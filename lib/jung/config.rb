@@ -3,14 +3,19 @@ module Jung
 
     attr_reader :driver, :options
 
+    def self.load(file = "config/jung.yml", namespace = nil)
+      options = YAML.load_file file
+      return self.new options[namespace.to_s]
+    end
+
     def initialize(options)
-      @driver = options[:driver]
-      @options = options[:options]
-      require 'jung/drivers/' + options[:driver].to_s.underscore + '.rb'
+      @driver = options["driver"]
+      @options = options["options"]
+      require 'jung/drivers/' + options["driver"].underscore + '.rb'
     end
 
     def driver_const
-      Jung::Drivers.const_get self.driver.to_s.camelize
+      Jung::Drivers.const_get self.driver.camelize
     end
 
   end
