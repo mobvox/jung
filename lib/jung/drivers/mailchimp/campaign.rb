@@ -64,6 +64,7 @@ module Jung::Drivers::Mailchimp::Campaign
     # TODO: Refactor with ||
     if id
       api.campaign_update self
+      puts "Not Yet Supported"
     else
       @id = api.campaign_create self
     end
