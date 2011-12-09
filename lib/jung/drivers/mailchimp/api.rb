@@ -34,7 +34,7 @@ class Jung::Drivers::Mailchimp::Api
   end
 
   def list_subscribe(recipient)
-    merge_vars = recipient.custom_fields.inject({"FNAME" => recipient.name }) do | acc, v |
+    merge_vars = recipient.custom_fields.reduce({"FNAME" => recipient.name }) do | acc, v |
       acc[v.first.to_s.upcase] = v.last
       acc
     end
@@ -70,6 +70,50 @@ class Jung::Drivers::Mailchimp::Api
       })
     end
     current_members
+  end
+
+  def list_static_segments
+    gb.list_static_segments(:id => list_id).reduce({}) do | acc, v |
+      acc[v["name"]] = v["id"]
+      acc
+    end
+  end
+
+  def list_wipe_static_segments
+    # TODO: Call this only to unused segments. Internal use only for now.
+    list_static_segments.each do | campaign_id, segment_id |
+      list_static_segment_delete segment_id
+    end
+  end
+
+  def find_or_add_static_segment name
+    find_static_segment(name) || 
+    list_static_segment_add(name)
+  end
+
+  def list_static_segment_add name
+    gb.list_static_segment_add :id => list_id, :name => name
+  end
+
+  def find_static_segment name
+    static_segments = list_static_segments
+    static_segments[name]
+  end
+
+  def list_static_segment_reset static_segment_id
+    gb.list_static_segment_members_add :id => list_id, :seg_id => static_segment_id
+  end
+
+  def list_static_segment_delete static_segment_id
+    gb.list_static_segment_del :id => list_id, :seg_id => static_segment_id
+  end  
+
+  def list_static_segment_members_add static_segment_id, emails
+    add_errors_and_return(gb.list_static_segment_members_add({
+      :id => list_id,
+      :seg_id => static_segment_id,
+      :batch => emails
+    })) { self["success"] == emails.count }
   end
 
   # Campaign Related
@@ -120,6 +164,21 @@ class Jung::Drivers::Mailchimp::Api
 
   def campaign_delete id
     gb.campaign_delete :cid => id
+  end
+
+  def campaign_update_static_segment id, static_segment_id
+    gb.campaign_update :cid => id, :name => "segment_opts", :value => {
+      :match => "all",
+      :conditions => [{ :field => "static_segment", :op => "eq", :value => static_segment_id }]
+    }
+  end
+
+  def campaign_schedule id, time
+    gb.campaign_schedule :cid => id, :schedule_time => time.utc.strftime('%Y-%m-%d %H:%M:%S')
+  end
+
+  def campaign_unschedule id
+    gb.campaign_unschedule :cid => id
   end
 
   private

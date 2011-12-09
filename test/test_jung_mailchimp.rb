@@ -56,14 +56,16 @@ class TestJung < Test::Unit::TestCase
       :sender => Jung::Sender.new('Lorem ipsum', 'contato@mobvox.com.br')
     })
 
-    # Add some recipients
+    # Add one recipient
     campaign.create_recipient :name => 'Lorem', :address => 'lorem@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer", :phone => '33554466' }
-    campaign.create_recipient :name => 'Ipsum', :address => 'ipsum@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer" }
-
+    
     campaign.subject = campaign.name
     campaign.template = campaign.name
 
-    campaign.deliver
+    assert campaign.schedule Time.now + (60 * 60 * 24)
+    assert campaign.unschedule
+    # assert campaign.deliver
+    assert campaign.delete
   end
 
 end

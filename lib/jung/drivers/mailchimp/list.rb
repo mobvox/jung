@@ -1,4 +1,4 @@
-module Jung::Drivers::Mailchimp::List
+ module Jung::Drivers::Mailchimp::List
 
   def save
     sync_merge_vars &&
@@ -18,16 +18,16 @@ module Jung::Drivers::Mailchimp::List
 
   def sync_merge_vars
     return true if recipients.count == 0
-    (recipients.map { |recipient| sync_recipient_merge_vars recipient } ).reduce &:&
+    (recipients.map { |recipient| sync_recipient_merge_vars recipient }).reduce &:&
   end
 
   def sync_recipient_merge_vars(recipient)
-    (recipient.custom_fields.map { |var, value| api.list_merge_var_add var } ).reduce &:&
+    (recipient.custom_fields.map { |var, value| api.list_merge_var_add var }).reduce &:&
   end
 
   def sync_members
     return true if recipients.count == 0
-    (recipients.map { |recipient| api.list_subscribe(recipient) } ).reduce &:&
+    (recipients.map { |recipient| api.list_subscribe(recipient) }).reduce &:&
   end
 
   def delete_non_members
