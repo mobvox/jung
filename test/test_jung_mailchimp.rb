@@ -60,7 +60,7 @@ class TestJung < Test::Unit::TestCase
     campaign.create_recipient :name => 'Lorem', :address => 'lorem@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer", :phone => '33554466' }
     
     campaign.subject = campaign.name
-    campaign.template = campaign.name
+    campaign.message = campaign.name
 
     assert campaign.schedule Time.now + (60 * 60 * 24)
     assert campaign.unschedule

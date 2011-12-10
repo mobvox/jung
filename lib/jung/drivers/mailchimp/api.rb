@@ -136,7 +136,7 @@ class Jung::Drivers::Mailchimp::Api
         :fb_comments => false,
       },
       :content => {
-        :html => ''
+        :html => campaign.message
       }
     })) { gsub(/\"/, '') }
   end

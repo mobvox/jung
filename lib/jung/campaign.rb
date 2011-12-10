@@ -2,13 +2,13 @@ module Jung
   class Campaign < Jung::List
 
     attr_reader :id
-    attr_accessor :name, :sender, :subject, :template
+    attr_accessor :name, :sender, :subject, :message
     
     def initialize(options)
       @name = options[:name]
       @subject = options[:subject]
       @sender = options[:sender]
-      @template = options[:template]
+      @message = options[:message]
 
       super options
     end

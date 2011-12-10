@@ -10,7 +10,7 @@ module Jung::Drivers::Mailchimp::Campaign
     
     @name = campaign["title"]
     @subject = campaign["subject"]
-    @template = campaign_content
+    @message = campaign_content
     @sender = Jung::Sender.new(campaign["from_name"], campaign["from_email"])
   end
 
