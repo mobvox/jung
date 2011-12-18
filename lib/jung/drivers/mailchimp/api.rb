@@ -33,19 +33,19 @@ class Jung::Drivers::Mailchimp::Api
     merge_vars_array.map { |e| e["tag"] }
   end
 
-  def list_subscribe(recipient)
+  def list_subscribe(recipient)  
     merge_vars = recipient.custom_fields.reduce({"FNAME" => recipient.name }) do | acc, v |
       acc[v.first.to_s.upcase] = v.last
       acc
-    end
-
+    end if recipient.custom_fields != nil
+  
     add_errors_and_return(gb.list_subscribe({
       :id => list_id,
       :email_address => recipient.address,
       :merge_vars => merge_vars,
       :double_optin => false,
-      :update_existing => true
-    })) { self == 'true' }
+      :update_existin => true
+    })) { self == true }
   end
 
   def list_unsubscribe(address)
@@ -184,7 +184,7 @@ class Jung::Drivers::Mailchimp::Api
   private
 
   def add_errors_and_return(result, &proc)
-    if result["error"]
+    if result.is_a?(Hash) && result["error"]
       self.errors ||= [] << result["code"].to_s + ' - ' + result["error"]
       false
     else

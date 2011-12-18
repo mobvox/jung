@@ -18,7 +18,9 @@
 
   def sync_merge_vars
     return true if recipients.count == 0
-    (recipients.map { |recipient| sync_recipient_merge_vars recipient }).reduce &:&
+    (recipients.map do |recipient|
+      sync_recipient_merge_vars(recipient) if recipient.custom_fields != nil
+    end).reduce &:&
   end
 
   def sync_recipient_merge_vars(recipient)

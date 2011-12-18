@@ -15,8 +15,8 @@ module Jung::Drivers::Mailchimp::Campaign
   end
 
   def save
-    if sync_merge_vars &&
-       sync_members &&
+    # if sync_merge_vars &&
+    if sync_members &&
        sync_campaign &&
        sync_static_segments
       @id
@@ -24,18 +24,15 @@ module Jung::Drivers::Mailchimp::Campaign
   end
 
   def deliver
-    save
-    api.campaign_send_now id
+    api.campaign_send_now(id) if save
   end
 
   def schedule time
-    save &&
-    api.campaign_schedule(id, time)
+    api.campaign_schedule(id, time) if save
   end
 
   def unschedule
-    id &&
-    api.campaign_unschedule(id)
+    api.campaign_unschedule(id) if id
   end
 
   def delete
@@ -67,7 +64,7 @@ module Jung::Drivers::Mailchimp::Campaign
   end
 
   def delete_static_segment
-    static_segment_id = api.find_static_segment id
+    static_segment_id = api.list_static_segment_find id
     api.list_static_segment_delete static_segment_id
   end
 
