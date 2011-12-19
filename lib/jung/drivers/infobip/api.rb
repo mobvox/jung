@@ -25,7 +25,7 @@ class Jung::Drivers::Infobip::Api
   end
 
   def send_sms(address, message, sender)
-    do_get_request :sendsms, :GSM => address, :SMSText => message, :sender => sender
+    do_get_request :sendsms, :GSM => address, :SMSText => message, :sender => sender, :DataCoding => '8'
   end
 
   private
