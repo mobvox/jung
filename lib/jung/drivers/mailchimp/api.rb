@@ -44,7 +44,7 @@ class Jung::Drivers::Mailchimp::Api
       :email_address => recipient.address,
       :merge_vars => merge_vars,
       :double_optin => false,
-      :update_existin => true
+      :update_existing => true
     })) { self == true }
   end
 
