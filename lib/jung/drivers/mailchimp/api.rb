@@ -162,6 +162,10 @@ class Jung::Drivers::Mailchimp::Api
     gb.campaign_send_now :cid => id
   end
 
+  def campaign_send_test id, recipients
+    gb.campaign_send_test :cid => id, :test_emails => recipients
+  end
+
   def campaign_delete id
     gb.campaign_delete :cid => id
   end
