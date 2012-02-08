@@ -27,6 +27,10 @@ module Jung::Drivers::Mailchimp::Campaign
     api.campaign_send_now(id) if save
   end
 
+  def deliver_test(recipients)
+    api.campaign_send_test(id, recipients) if save
+  end
+
   def schedule time
     api.campaign_schedule(id, time) if save
   end
