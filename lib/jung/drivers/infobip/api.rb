@@ -24,8 +24,12 @@ class Jung::Drivers::Infobip::Api
     }
   end
 
-  def send_sms(address, message, sender)
-    do_get_request :sendsms, :GSM => address, :SMSText => message, :sender => sender, :DataCoding => '8'
+  def send_sms(address, message, sender, options = {})
+    do_get_request :sendsms, { :GSM => address, :SMSText => message, :sender => sender, :DataCoding => '8' }.merge(options)
+  end
+
+  def schedule_sms(address, message, sender, from_now, options = {})
+    send_sms address, message, sender, { :sendDateTime => from_now }.merge(options)
   end
 
   private
