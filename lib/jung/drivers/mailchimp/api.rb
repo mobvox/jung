@@ -1,9 +1,10 @@
 class Jung::Drivers::Mailchimp::Api
 
-  attr_reader :gb, :list_id, :errors
+  attr_reader :config, :gb, :list_id, :errors
   attr_writer :errors
 
   def initialize(config)
+    @config = config
     @gb = Gibbon.new config.options["api_key"]
     @list_id = config.options["list_id"]
   end
@@ -134,6 +135,7 @@ class Jung::Drivers::Mailchimp::Api
         :to_name => '*|FNAME|*',
         :generate_text => true,
         :fb_comments => false,
+        :inline_css => config.options["inline_css"] || true
       },
       :content => {
         :html => campaign.message
