@@ -10,9 +10,6 @@
     list_members
   end
 
-  def errors
-    api.errors
-  end
 
   protected
 
