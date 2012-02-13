@@ -32,7 +32,7 @@ class Jung::Drivers::Infobip::Api
   private
 
   def get_error_message id
-    error_messages[id.to_i] || 'Unknow error ID: ' + id
+    error_messages[id.to_i] || "Unknow error ID: #{id}"
   end
 
   def do_get_request method, params
@@ -41,8 +41,8 @@ class Jung::Drivers::Infobip::Api
       url + '&' +  CGI.escape(param.first.to_s) + '=' + CGI.escape(param.last.to_s)
     end
     result = Net::HTTP.get_response(URI.parse(url)).body
-   
-    self.errors ||= [] << 'url: ' + url + ' - ' + get_error_message(result)
+
+    self.errors << get_error_message(result)
     
     result.to_i > 1 ? result : false
   end
