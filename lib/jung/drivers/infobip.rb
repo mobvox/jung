@@ -12,4 +12,8 @@ module Jung::Drivers::Infobip
     base.api = Api.new base.config
   end
 
+  def errors
+    api.errors
+  end
+
 end
