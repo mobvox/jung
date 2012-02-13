@@ -15,4 +15,8 @@ module Jung::Drivers::Mailchimp
     base.api = Api.new base.config
   end
 
+  def errors
+    api.errors
+  end
+
 end

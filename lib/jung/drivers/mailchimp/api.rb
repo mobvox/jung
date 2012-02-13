@@ -1,12 +1,13 @@
 class Jung::Drivers::Mailchimp::Api
 
-  attr_reader :config, :gb, :list_id, :errors
-  attr_writer :errors
+  attr_reader :config, :gb, :list_id
+  attr_accessor :errors
 
   def initialize(config)
     @config = config
     @gb = Gibbon.new config.options["api_key"]
     @list_id = config.options["list_id"]
+    @errors = []
   end
 
   # List Related

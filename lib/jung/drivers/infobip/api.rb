@@ -2,13 +2,14 @@ class Jung::Drivers::Infobip::Api
 
   require 'net/http'
 
-  attr_reader :username, :password, :api_url, :errors, :error_messages
-  attr_writer :errors
+  attr_reader :username, :password, :api_url, :error_messages
+  attr_accessor :errors
 
   def initialize(config)
     @username = config.options["username"]
     @password = config.options["password"]
     @api_url = config.options["api_url"]
+    @errors = []
 
     @error_messages = {
       -2 => "Not enough credits",
@@ -26,10 +27,6 @@ class Jung::Drivers::Infobip::Api
 
   def send_sms(address, message, sender, options = {})
     do_get_request :sendsms, { :GSM => address, :SMSText => message, :sender => sender, :DataCoding => '8' }.merge(options)
-  end
-
-  def schedule_sms(address, message, sender, from_now, options = {})
-    send_sms address, message, sender, { :sendDateTime => from_now }.merge(options)
   end
 
   private
