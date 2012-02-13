@@ -1,7 +1,8 @@
 module Jung::Drivers::Infobip::Campaign
 
   attr_accessor :username, :password, :api_url, :messages_ids
-  attr_accessor :app_id, :webhook
+  attr_accessor :app_id # Warning: Infobip limitation: app_id should not be more than 30 chars
+  attr_accessor :webhook
 
   attr_reader :deliver_at
   def deliver_at=(val)
