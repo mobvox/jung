@@ -12,6 +12,12 @@ class Jung::Drivers::Mailchimp::Api
 
   # List Related
 
+  def list_ensure_merge_vars(recipient)
+    recipient.attribute_names.map do |attribute_name|
+      list_merge_var_add(attribute_name)
+    end.reduce &:&
+  end
+
   def list_merge_var_add(merge_var)
     tag = merge_var.to_s.upcase
     name = tag.capitalize
@@ -36,10 +42,10 @@ class Jung::Drivers::Mailchimp::Api
   end
 
   def list_subscribe(recipient)  
-    merge_vars = recipient.custom_fields.reduce({"FNAME" => recipient.name }) do | acc, v |
-      acc[v.first.to_s.upcase] = v.last
-      acc
-    end if recipient.custom_fields != nil
+    merge_vars = recipient.attributes.inject("FNAME" => recipient.name) do |attributes, (k, v)|
+      attributes[k.to_s.upcase] = v
+      attributes
+    end
   
     add_errors_and_return(gb.list_subscribe({
       :id => list_id,
@@ -65,11 +71,13 @@ class Jung::Drivers::Mailchimp::Api
     members_array["data"].each do |member|
       # TODO: Batch this method (Mailchimp supports up to 50 per call)
       info = gb.list_member_info :id => list_id, :email_address => member["email"]
-      current_members << Jung::Recipient.new({
-        :name => info["data"][0]["merges"]["FNAME"],
-        :address => member["email"],
-        :custom_fields => info["data"][0]["merges"]
-      })
+
+      attributes = { :name => info["data"][0]["merges"].delete("FNAME"), :address => info["data"][0]["merges"].delete("EMAIL") }
+      info["data"][0]["merges"].each_pair do |k, v|
+        attributes[k.downcase.to_sym] = v
+      end
+
+      current_members << Jung::Recipient.new(attributes)
     end
     current_members
   end
