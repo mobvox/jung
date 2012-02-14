@@ -7,21 +7,16 @@
   end
 
   def all
-    list_members
+    api.list_members
   end
-
 
   protected
 
   def sync_merge_vars
     return true if recipients.count == 0
     (recipients.map do |recipient|
-      sync_recipient_merge_vars(recipient) if recipient.custom_fields != nil
+      api.list_ensure_merge_vars(recipient)
     end).reduce &:&
-  end
-
-  def sync_recipient_merge_vars(recipient)
-    (recipient.custom_fields.map { |var, value| api.list_merge_var_add var }).reduce &:&
   end
 
   def sync_members
@@ -39,6 +34,7 @@
         api.list_unsubscribe member.address
       end
     end
+    true
   end
 
 end
