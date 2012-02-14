@@ -10,13 +10,13 @@ class TestJung < Test::Unit::TestCase
   def test_list_save
     list = Jung::List.new :config => config
 
-    list.create_recipient :name => 'Lorem', :address => 'lorem@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer", :phone => '33554466' }
-    list.create_recipient :name => 'Ipsum', :address => 'ipsum@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer" }
-    list.create_recipient :name => 'Dolor', :address => 'dolor@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer" }
-    list.create_recipient :name => 'Sit', :address => 'sit@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer" }
-    list.create_recipient :name => 'Amet', :address => 'amet@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer" }
-    list.create_recipient :name => 'Consectetur', :address => 'consectetur@mobvox.com.br', :custom_fields => { :sex => 'f', :function => "Developer" }
-    list.create_recipient :name => 'Adipiscing', :address => 'adipiscing@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Psychologist" }
+    list.create_recipient :name => 'Lorem', :address => 'lorem@mobvox.com.br', :sex => 'm', :function => "Developer", :phone => '33554466'
+    list.create_recipient :name => 'Ipsum', :address => 'ipsum@mobvox.com.br', :sex => 'm', :function => "Developer"
+    list.create_recipient :name => 'Dolor', :address => 'dolor@mobvox.com.br', :sex => 'm', :function => "Developer"
+    list.create_recipient :name => 'Sit', :address => 'sit@mobvox.com.br', :sex => 'm', :function => "Developer"
+    list.create_recipient :name => 'Amet', :address => 'amet@mobvox.com.br', :sex => 'm', :function => "Developer"
+    list.create_recipient :name => 'Consectetur', :address => 'consectetur@mobvox.com.br', :sex => 'f', :function => "Developer"
+    list.create_recipient :name => 'Adipiscing', :address => 'adipiscing@mobvox.com.br', :sex => 'm', :function => "Psychologist"
 
     assert list.save
   end
@@ -30,8 +30,8 @@ class TestJung < Test::Unit::TestCase
       :subject => 'Fusce tempus, nibh eleifend feugiat lobortis.',
       :sender => Jung::Sender.new('Lorem ipsum', 'contato@mobvox.com.br')
     })
-    campaign.create_recipient :name => 'Lorem', :address => 'lorem@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer", :phone => '33554466' }
-    campaign.create_recipient :name => 'Ipsum', :address => 'ipsum@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer" }
+    campaign.create_recipient :name => 'Lorem', :address => 'lorem@mobvox.com.br', :sex => 'm', :function => "Developer", :phone => '33554466'
+    campaign.create_recipient :name => 'Ipsum', :address => 'ipsum@mobvox.com.br', :sex => 'm', :function => "Developer"
     id = campaign.save
     assert id != nil
     
@@ -57,7 +57,7 @@ class TestJung < Test::Unit::TestCase
     })
 
     # Add one recipient
-    campaign.create_recipient :name => 'Lorem', :address => 'lorem@mobvox.com.br', :custom_fields => { :sex => 'm', :function => "Developer", :phone => '33554466' }
+    campaign.create_recipient :name => 'Lorem', :address => 'lorem@mobvox.com.br', :sex => 'm', :function => "Developer", :phone => '33554466'
     
     campaign.subject = campaign.name
     campaign.message = campaign.name
