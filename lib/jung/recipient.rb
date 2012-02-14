@@ -1,12 +1,16 @@
 module Jung
   class Recipient
 
+    attr_accessor :name, :address
     attr_reader :attribute_names
     attr_reader :attributes
 
     def initialize(attributes)
       @attribute_names = []
       @attributes = {}
+
+      @name = attributes.delete(:name)
+      @address = attributes.delete(:address)
 
       @attribute_names = attributes.keys.uniq.map(&:to_sym)
 
