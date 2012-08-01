@@ -26,7 +26,8 @@ class Jung::Drivers::Infobip::Api
   end
 
   def send_sms(address, message, sender, options = {})
-    do_get_request :sendsms, { :GSM => address, :SMSText => message, :sender => sender, :DataCoding => '8' }.merge(options)
+    type = message.to_s.size > 70 ? 'LongSMS' : nil
+    do_get_request :sendsms, { :GSM => address, :SMSText => message, :sender => sender, :Type => type, :DataCoding => '8' }.merge(options)
   end
 
   private
