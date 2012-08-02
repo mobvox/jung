@@ -1,6 +1,7 @@
 class Jung::Drivers::Infobip::Api
 
   require 'net/http'
+  require 'jung/drivers/infobip/sms_counter'
 
   attr_reader :username, :password, :api_url, :error_messages
   attr_accessor :errors
