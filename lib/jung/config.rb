@@ -11,7 +11,7 @@ module Jung
     def initialize(options)
       @driver = options["driver"]
       @options = options["options"]
-      require 'jung/drivers/' + options["driver"].underscore + '.rb'
+      Jung::Drivers.load options["driver"]
     end
 
     def driver_const

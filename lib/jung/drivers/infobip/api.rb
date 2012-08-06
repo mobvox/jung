@@ -1,6 +1,8 @@
 class Jung::Drivers::Infobip::Api
 
   require 'net/http'
+  require 'gsm_encoder'
+  require 'jung/drivers/infobip/sms_counter'
 
   attr_reader :username, :password, :api_url, :error_messages
   attr_accessor :errors
@@ -26,8 +28,26 @@ class Jung::Drivers::Infobip::Api
   end
 
   def send_sms(address, message, sender, options = {})
-    type = message.to_s.size > 70 ? 'LongSMS' : nil
-    do_get_request :sendsms, { :GSM => address, :SMSText => message, :sender => sender, :Type => type, :DataCoding => '8' }.merge(options)
+    count = Jung::Drivers::Infobip::SmsCounter.count message.to_s
+
+    type = count[:messages] > 1 ? 'LongSMS' : nil
+    if count[:encoding] == :utf16
+      data_coding = 8
+      encoding = 'UTF-8'
+    else
+      data_coding = 1
+      encoding = nil
+      message = GSMEncoder.encode message
+    end
+
+    do_get_request :sendsms, {
+      :GSM => address, 
+      :SMSText => message, 
+      :sender => sender, 
+      :Type => type, 
+      :DataCoding => data_coding, 
+      :encoding => encoding,
+    }.merge(options)
   end
 
   private
