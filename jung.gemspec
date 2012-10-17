@@ -4,13 +4,13 @@ $:.push File.expand_path("../lib", __FILE__)
 Gem::Specification.new do |s|
   s.name        = "jung"
   s.version     = File.read('VERSION')
-  s.authors     = ["arielpts"]
+  s.authors     = ["arielpts", "danxexe"]
   s.email       = ["arielpts@me.com"]
   s.homepage    = "http://www.mobvox.com.br"
   s.summary     = "Eletronic message deliver proxy"
   s.description = "Have you ever wondered how it would be if there were an easy way to send your message to billions of people? The Jung’s collective unconscious will help in this arduous task!"
 
-  s.rubyforge_project = "admin_widgets"
+  # s.rubyforge_project = "admin_widgets"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
